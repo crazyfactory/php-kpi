@@ -77,7 +77,7 @@ class MicroMetrics
 			{
 				// run the task
 				try{
-					$task->run();
+					$run_result=$task->run();
 				}
 				catch (Exception $e) {
 					$this->notify();
@@ -85,7 +85,7 @@ class MicroMetrics
 
 				// validate the task
 				try{
-					$task->validate();
+					$task->validate($run_result, $task->data);
 				}
 				catch (Exception $e) {
 					$this->notify();
