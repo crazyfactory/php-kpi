@@ -10,16 +10,30 @@ class MicroMetrics
 	private $name;
 	private $treshold;
 	private $taskQueue=array();
+	private $lastCheck;
 
 	/**
 	 * Task constructor.
 	 * @param string $name the name of the task
+	 * @param int $last_checked : timestamp
 	 * @param int $treshold_in_minutes : pauses between runs for this amount in minutes
 	 */
-	public function __construct( $name, $treshold_in_minutes=5)
+	public function __construct( $name, $last_checked=0, $treshold_in_minutes=5)
 	{
 		$this->name=$name;
+		$this->lastCheck=$last_checked;
 		$this->treshold=$treshold_in_minutes;
+	}
+
+	/**
+	 * validates if the time is right to run the tasks again
+	 * @return bool
+	 */
+	private function proceedExecution()
+	{
+		$next_check=$this->lastCheck + ($this->treshold*60);
+		$proceed= time() > $next_check ? true : false;
+		return $proceed;
 	}
 
 	/**
@@ -52,30 +66,40 @@ class MicroMetrics
 	}
 
 	/**
-	 *
+	 * runs the queued tasks one-by-one
+	 * validated if the last check is long enough ago ($this->proceedExecution return true)
+	 * @return void
 	 */
 	public function runTasks()
 	{
-		foreach($this->taskQueue as $task)
-		{
-			// run the task
-			try{
-				$task->run();
-			}
-			catch (Exception $e) {
-				$this->notify();
-			}
+		if($this->proceedExecution()){
+			foreach($this->taskQueue as $task)
+			{
+				// run the task
+				try{
+					$task->run();
+				}
+				catch (Exception $e) {
+					$this->notify();
+				}
 
-			// validate the task
-			try{
-				$task->validate();
-			}
-			catch (Exception $e) {
-				$this->notify();
+				// validate the task
+				try{
+					$task->validate();
+				}
+				catch (Exception $e) {
+					$this->notify();
+				}
 			}
 		}
+
 	}
 
+	/**
+	 * currently in WIP
+	 * @param $msg
+	 * @param $data
+	 */
 	private function notify($msg,$data)
 	{
 		echo "<h2>Notification</h2>";
