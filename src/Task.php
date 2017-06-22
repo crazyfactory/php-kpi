@@ -6,7 +6,7 @@ namespace CrazyFactory\MicroMetrics;
 class Task
 {
 	private $name;
-	private $data;
+	public $data;
 
 	/**
 	 * Task constructor.
