@@ -36,6 +36,13 @@ class MicroMetrics
 		return $proceed;
 	}
 
+	public static function ready($last_check, $treshold_in_minutes)
+	{
+		$next_check=$last_check + ($treshold_in_minutes*60);
+		$proceed= time() > $next_check ? true : false;
+		return $proceed;
+	}
+
 	/**
 	 * returns the name property
 	 * @return string
