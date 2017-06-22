@@ -13,7 +13,7 @@ class MicroMetrics
 	private $lastCheck;
 
 	/**
-	 * Task constructor.
+	 * Task constructor
 	 * @param string $name the name of the task
 	 * @param int $last_checked : timestamp
 	 * @param int $treshold_in_minutes : pauses between runs for this amount in minutes
@@ -60,6 +60,25 @@ class MicroMetrics
 	public function addTask($task)
 	{
 		$this->taskQueue[]=$task;
+		return $this->taskQueue;
+	}
+
+	/**
+	 * sets an array as queues tasks
+	 * this potentially override tasks set with MicroMetrics->addTask
+	 * @param array $task_queue
+	 * @return array
+	 * @throws Exception
+	 */
+	public function setTaskQueue($task_queue)
+	{
+		if(is_array($task_queue))
+		{
+			$this->taskQueue=$task_queue;
+		}
+		else{
+			throw new Exception('MicroMetrics->setTaskQueue called with non-array parameter');
+		}
 		return $this->taskQueue;
 	}
 
