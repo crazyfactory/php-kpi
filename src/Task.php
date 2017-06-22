@@ -11,9 +11,10 @@ class Task
 	 * Task constructor.
 	 * @param string $name the name of the task
 	 */
-	public function __construct( $name)
+	public function __construct( $name, $run_method)
 	{
 		$this->name=$name;
+		$this->run = $run_method;
 	}
 
 	/**
@@ -38,9 +39,6 @@ class Task
 	{
 		return $this->name;
 	}
-	
-
-
 
 }
 
