@@ -11,10 +11,11 @@ class Task
 	 * Task constructor.
 	 * @param string $name the name of the task
 	 */
-	public function __construct( $name, $run_method)
+	public function __construct( $name, $run_method, $validate_method)
 	{
 		$this->name=$name;
 		$this->run = $run_method;
+		$this->validate = $validate_method;
 	}
 
 	/**
