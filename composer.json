@@ -1,0 +1,28 @@
+{
+  "name": "crazyfactory/micrometrics",
+  "description": "",
+  "type": "library",
+  "keywords": [],
+  "homepage": "https://github.com/crazyfactory/php-micrometrics",
+  "license": "GPL-3.0+",
+  "autoload": {
+    "psr-4": {
+      "CrazyFactory\\MicroMetrics\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CrazyFactory\\MicroMetrics\\Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "php": ">=7.1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.5.*"
+  },
+  "scripts": {
+    "test": "phpunit -c phpunit.xml"
+  }
+}
+
