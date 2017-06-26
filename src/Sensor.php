@@ -5,27 +5,38 @@ namespace CrazyFactory\MicroMetrics;
 
 abstract class Sensor implements IMetrics
 {
-	public $name;
+	private $name;
 
-	public function __construct($name = null)
+	/**
+	 * Sensor constructor.
+	 * @param string $name
+	 */
+	public function __construct($name = 'sensor')
 	{
-		if(!$name)
-		{
-			$name = get_class($this);
-		}
-		$this->name=$name;
+		$this->name = $name;
 	}
 
+	/**
+	 * @return string $name of the sensor instance
+	 */
 	public function getName()
 	{
 		return $this->name;
 	}
 
+	/**
+	 * sets a string to be name of the sensor instance
+	 * @param $name
+	 * @return string $name of the sensor instance
+	 */
 	public function setName($name)
 	{
 		$this->name = $name;
 		return $this->name;
 	}
 
-
+	/**
+	 * @return mixed
+	 */
+	abstract public function validate();
 }

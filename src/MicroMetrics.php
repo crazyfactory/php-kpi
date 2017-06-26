@@ -7,13 +7,15 @@ use CrazyFactory\ShopApi\Exception;
 
 class MicroMetrics
 {
-	private $name;
-	private $treshold;
-	private $taskQueue=array();
+	private $aggregator = array();
+	private $aggregatorQueue = array();
 	private $lastCheck;
+	private $name = '';
+	private $sensorQueue= array();
+	private $treshold;
 
 	/**
-	 * Task constructor
+	 * MicoMetrics constructor
 	 * @param string $name the name of the task
 	 * @param int $last_checked : timestamp
 	 * @param int $treshold_in_minutes : pauses between runs for this amount in minutes
@@ -26,16 +28,11 @@ class MicroMetrics
 	}
 
 	/**
-	 * validates if the time is right to run the tasks again
+	 * validates if we are ready to check again
+	 * @param $last_check timestamp
+	 * @param $treshold_in_minutes
 	 * @return bool
 	 */
-	private function proceedExecution()
-	{
-		$next_check=$this->lastCheck + ($this->treshold*60);
-		$proceed= time() > $next_check ? true : false;
-		return $proceed;
-	}
-
 	public static function ready($last_check, $treshold_in_minutes)
 	{
 		$next_check=$last_check + ($treshold_in_minutes*60);
@@ -44,7 +41,7 @@ class MicroMetrics
 	}
 
 	/**
-	 * returns the name property
+	 * returns the name property of MicroMetrics instance
 	 * @return string
 	 */
 	public function getName()
@@ -53,42 +50,71 @@ class MicroMetrics
 	}
 
 	/**
-	 * Adds a task to the task queue
-	 * @param $task the new task to add to the queue
-	 * @return array with all queue tasks
+	 * Adds a aggregator to its queue
+	 * @param $aggregator the new Aggregator to add to the queue
+	 * @return array with all queued Aggregators
 	 */
-	public function addTask($task)
+	public function addToAggregatorQueue($aggregator)
 	{
-		$this->taskQueue[]=$task;
-		return $this->taskQueue;
+		$this->aggregatorQueue[]=$aggregator;
+		return $this->aggregatorQueue;
+	}
+
+	/**
+	 * adds a Sensor to Queue to process
+	 * @param $sensor
+	 * @return array $sensorQueue
+	 */
+	public function addToSensorQueue($sensor)
+	{
+		$this->aggregatorQueue[]=$sensor;
+		return $this->sensorQueue;
 	}
 
 	/**
 	 * sets an array as queues tasks
 	 * this potentially override tasks set with MicroMetrics->addTask
-	 * @param array $task_queue
+	 * @param array $aggregator_queue
 	 * @return array
 	 * @throws Exception
 	 */
-	public function setTaskQueue($task_queue)
+	public function setAggregatorQueue($aggregator_queue)
 	{
-		if(is_array($task_queue))
+		if(is_array($aggregator_queue))
 		{
-			$this->taskQueue=$task_queue;
+			$this->aggregatorQueue=$aggregator_queue;
 		}
 		else{
-			throw new Exception('MicroMetrics->setTaskQueue called with non-array parameter');
+			throw new Exception('MicroMetrics->setAggregatorQueue called with non-array parameter');
 		}
-		return $this->taskQueue;
+		return $this->aggregatorQueue;
 	}
 
 	/**
-	 * shifts the task from the start of the queue
-	 * @return mixed next task to process
+	 * set a sensor to queue
+	 * @param array $sensor_queue
+	 * @return array $this->sensorQueue
+	 * @throws Exception
 	 */
-	public function getNextTask()
+	public function setSensorQueue($sensor_queue)
 	{
-		return array_shift($this->taskQueue);
+		if(is_array($sensor_queue))
+		{
+			$this->sensorQueue = $sensor_queue;
+		}
+		else{
+			throw new Exception('MicroMetrics->setAggregatorQueue called with non-array parameter');
+		}
+		return $this->sensorQueue;
+	}
+
+	/**
+	 * shifts an Aggregator from the start of the queue
+	 * @return mixed next Aggregator to process
+	 */
+	public function getNextAggregator()
+	{
+		return array_shift($this->aggregatorQueue);
 	}
 
 	/**
@@ -96,30 +122,27 @@ class MicroMetrics
 	 * validated if the last check is long enough ago ($this->proceedExecution return true)
 	 * @return void
 	 */
-	public function runTasks()
+	public function runAggregators()
 	{
-		if($this->proceedExecution()){
-			foreach($this->taskQueue as $task)
+		if(self::ready()){
+			foreach($this->aggregatorQueue as $aggregator)
 			{
-				// run the task
-				try{
-					$run_result=$task->run();
-				}
-				catch (Exception $e) {
-					$this->notify();
-				}
+				// run the aggregator
+				$aggregator_name = $aggregator->getName();
 
-				// validate the task
 				try{
-					$task->validate($run_result, $task->data);
+					$this->aggregator[$aggregator_name]=$aggregator->aggregate();
 				}
 				catch (Exception $e) {
-					$this->notify();
+					$this->notify($e);
 				}
 			}
-		}
 
+		}
+		return $this->aggregator;
 	}
+
+
 
 	/**
 	 * currently in WIP

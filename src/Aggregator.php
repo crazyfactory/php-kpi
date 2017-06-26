@@ -20,7 +20,11 @@ abstract class Aggregator implements IMetrics
 		$this->name=$name;
 	}
 
-	abstract public static function aggregate();
+	/**
+	 * aggregates the data for a specific metric
+	 * @return array
+	 */
+	abstract public function aggregate();
 
 	/**
 	 * provides the name of the Aggregator Instance
@@ -31,9 +35,15 @@ abstract class Aggregator implements IMetrics
 		return $this->name;
 	}
 
+	/**
+	 * set the name of the Aggregator instance
+	 * @param $name of the Aggregator instance
+	 * @return string $name
+	 */
 	public function setName($name)
 	{
 		$this->name = $name;
 		return $this->name;
 	}
+
 }
