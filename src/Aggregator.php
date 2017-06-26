@@ -11,12 +11,8 @@ abstract class Aggregator implements IMetrics
 	 * Aggregator constructor.
 	 * @param string $name optinal custom name, fallback is the classname
 	 */
-	public function __construct($name = null)
+	public function __construct($name = 'aggregator_default')
 	{
-		if(!$name)
-		{
-			$name = get_class($this);
-		}
 		$this->name=$name;
 	}
 

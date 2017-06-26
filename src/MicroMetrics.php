@@ -108,7 +108,7 @@ class MicroMetrics
 	 */
 	public function runAggregators()
 	{
-		if(self::ready()){
+		if(self::ready($this->lastCheck, $this->treshold)){
 			foreach($this->aggregatorQueue as $aggregator)
 			{
 				// run the aggregator
