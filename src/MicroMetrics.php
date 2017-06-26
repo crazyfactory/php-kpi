@@ -28,28 +28,6 @@ class MicroMetrics
 	}
 
 	/**
-	 * validates if we are ready to check again
-	 * @param $last_check timestamp
-	 * @param $treshold_in_minutes
-	 * @return bool
-	 */
-	public static function ready($last_check, $treshold_in_minutes)
-	{
-		$next_check=$last_check + ($treshold_in_minutes*60);
-		$proceed= time() > $next_check ? true : false;
-		return $proceed;
-	}
-
-	/**
-	 * returns the name property of MicroMetrics instance
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
 	 * Adds a aggregator to its queue
 	 * @param $aggregator the new Aggregator to add to the queue
 	 * @return array with all queued Aggregators
@@ -69,6 +47,83 @@ class MicroMetrics
 	{
 		$this->aggregatorQueue[]=$sensor;
 		return $this->sensorQueue;
+	}
+
+	/**
+	 * exposes data collected by Aggregators
+	 * @return array $aggregator contains data collected by all Aggregators
+	 */
+	public function getAggregatedData()
+	{
+		return $this->aggregator;
+	}
+
+	/**
+	 * returns the name property of MicroMetrics instance
+	 * @return string
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * shifts an Aggregator from the start of the queue
+	 * @return mixed next Aggregator to process
+	 */
+	private function getNextAggregator()
+	{
+		return array_shift($this->aggregatorQueue);
+	}
+
+	/**
+	 * currently in WIP
+	 * @param $msg
+	 * @param $data
+	 */
+	private function notify($msg,$data)
+	{
+		echo "<h2>Notification</h2>";
+		echo "<h3>$msg</h3>";
+		var_dump($data);
+	}
+
+	/**
+	 * validates if we are ready to check again
+	 * @param $last_check timestamp
+	 * @param $treshold_in_minutes
+	 * @return bool
+	 */
+	public static function ready($last_check, $treshold_in_minutes)
+	{
+		$next_check=$last_check + ($treshold_in_minutes*60);
+		$proceed= time() > $next_check ? true : false;
+		return $proceed;
+	}
+
+	/**
+	 * runs the queued tasks one-by-one
+	 * validated if the last check is long enough ago ($this->proceedExecution return true)
+	 * @return void
+	 */
+	public function runAggregators()
+	{
+		if(self::ready()){
+			foreach($this->aggregatorQueue as $aggregator)
+			{
+				// run the aggregator
+				$aggregator_name = $aggregator->getName();
+
+				try{
+					$this->aggregator[$aggregator_name]=$aggregator->aggregate();
+				}
+				catch (Exception $e) {
+					$this->notify($e);
+				}
+			}
+
+		}
+		return $this->aggregator;
 	}
 
 	/**
@@ -108,52 +163,5 @@ class MicroMetrics
 		return $this->sensorQueue;
 	}
 
-	/**
-	 * shifts an Aggregator from the start of the queue
-	 * @return mixed next Aggregator to process
-	 */
-	public function getNextAggregator()
-	{
-		return array_shift($this->aggregatorQueue);
-	}
-
-	/**
-	 * runs the queued tasks one-by-one
-	 * validated if the last check is long enough ago ($this->proceedExecution return true)
-	 * @return void
-	 */
-	public function runAggregators()
-	{
-		if(self::ready()){
-			foreach($this->aggregatorQueue as $aggregator)
-			{
-				// run the aggregator
-				$aggregator_name = $aggregator->getName();
-
-				try{
-					$this->aggregator[$aggregator_name]=$aggregator->aggregate();
-				}
-				catch (Exception $e) {
-					$this->notify($e);
-				}
-			}
-
-		}
-		return $this->aggregator;
-	}
-
-
-
-	/**
-	 * currently in WIP
-	 * @param $msg
-	 * @param $data
-	 */
-	private function notify($msg,$data)
-	{
-		echo "<h2>Notification</h2>";
-		echo "<h3>$msg</h3>";
-		var_dump($data);
-	}
 
 }
