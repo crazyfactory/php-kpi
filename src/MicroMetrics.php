@@ -104,7 +104,7 @@ class MicroMetrics
 	}
 
 	/**
-	 * calls 'validate' methode of all sensors in sensorQueue 
+	 * calls 'validate' methode of all sensors in sensorQueue
 	 * @param array $aggregator_data is the collected data of the aggregators just run
 	 * @return array with the results given back from
 	 */
