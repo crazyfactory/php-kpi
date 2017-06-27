@@ -10,19 +10,16 @@ class MicroMetrics
 	private $aggregator = array();
 	private $aggregatorQueue = array();
 	private $lastCheck;
-	private $name = '';
 	private $sensorQueue= array();
 	private $treshold;
 
 	/**
 	 * MicoMetrics constructor
-	 * @param string $name the name of the task
 	 * @param int $last_checked : timestamp
 	 * @param int $treshold_in_minutes : pauses between runs for this amount in minutes
 	 */
-	public function __construct( $name, $last_checked=0, $treshold_in_minutes=5)
+	public function __construct( $last_checked=0, $treshold_in_minutes=5)
 	{
-		$this->name=$name;
 		$this->lastCheck=$last_checked;
 		$this->treshold=$treshold_in_minutes;
 	}
@@ -59,15 +56,6 @@ class MicroMetrics
 	}
 
 	/**
-	 * returns the name property of MicroMetrics instance
-	 * @return string
-	 */
-	public function getName()
-	{
-		return $this->name;
-	}
-
-	/**
 	 * shifts an Aggregator from the start of the queue
 	 * @return mixed next Aggregator to process
 	 */
@@ -75,7 +63,7 @@ class MicroMetrics
 	{
 		return array_shift($this->aggregatorQueue);
 	}
-	
+
 
 	/**
 	 * validates if we are ready to check again
