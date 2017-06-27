@@ -3,9 +3,7 @@
 namespace CrazyFactory\MicroMetrics;
 
 
-use CrazyFactory\ShopApi\Exception;
-
-class MicroMetrics
+abstract class MicroMetrics
 {
 	private $aggregator = array();
 	private $aggregatorQueue = array();
@@ -20,8 +18,8 @@ class MicroMetrics
 	 */
 	public function __construct( $last_checked=0, $treshold_in_minutes=5)
 	{
-		$this->lastCheck=$last_checked;
-		$this->treshold=$treshold_in_minutes;
+		$this->lastCheck = $last_checked;
+		$this->treshold = $treshold_in_minutes;
 	}
 
 	/**
@@ -54,16 +52,6 @@ class MicroMetrics
 	{
 		return $this->aggregator;
 	}
-
-	/**
-	 * shifts an Aggregator from the start of the queue
-	 * @return mixed next Aggregator to process
-	 */
-	private function getNextAggregator()
-	{
-		return array_shift($this->aggregatorQueue);
-	}
-
 
 	/**
 	 * validates if we are ready to check again
@@ -115,7 +103,10 @@ class MicroMetrics
 		{
 			$sensor_name = $sensor->getName();
 			try{
-				$response[$sensor_name] = $sensor->validate($aggregator_data);
+
+				$sensor_result = $sensor->validate($aggregator_data);
+				$this->saveLog($sensor_result);
+				$response[$sensor_name] = $sensor_result;
 			}
 			catch (Exception $e) {
 				$this->notify($e);
@@ -124,6 +115,8 @@ class MicroMetrics
 		return $response;
 
 	}
+
+	abstract protected function saveLog($data);
 
 	/**
 	 * sets an array as queues tasks
