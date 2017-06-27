@@ -38,5 +38,5 @@ abstract class Sensor implements IMetrics
 	/**
 	 * @return mixed
 	 */
-	abstract public function validate();
+	abstract public function validate($aggregator_data);
 }
