@@ -104,6 +104,28 @@ class MicroMetrics
 	}
 
 	/**
+	 * calls 'validate' methode of all sensors in sensorQueue 
+	 * @param array $aggregator_data is the collected data of the aggregators just run
+	 * @return array with the results given back from
+	 */
+	public function runSensors($aggregator_data)
+	{
+		$response = array();
+		foreach($this->sensorQueue as $sensor)
+		{
+			$sensor_name = $sensor->getName();
+			try{
+				$response[$sensor_name] = $sensor->validate($aggregator_data);
+			}
+			catch (Exception $e) {
+				$this->notify($e);
+			}
+		}
+		return $response;
+
+	}
+
+	/**
 	 * sets an array as queues tasks
 	 * this potentially override tasks set with MicroMetrics->addTask
 	 * @param array $aggregator_queue
