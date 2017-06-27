@@ -75,18 +75,7 @@ class MicroMetrics
 	{
 		return array_shift($this->aggregatorQueue);
 	}
-
-	/**
-	 * currently in WIP
-	 * @param $msg
-	 * @param $data
-	 */
-	private function notify($msg,$data)
-	{
-		echo "<h2>Notification</h2>";
-		echo "<h3>$msg</h3>";
-		var_dump($data);
-	}
+	
 
 	/**
 	 * validates if we are ready to check again
