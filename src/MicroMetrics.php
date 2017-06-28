@@ -55,6 +55,11 @@ abstract class MicroMetrics
 		return $this->aggregator;
 	}
 
+	public function getStartTime()
+	{
+		return $this->started;
+	}
+
 	/**
 	 * implements the notification via slack & email
 	 * @param array $data
@@ -91,8 +96,13 @@ abstract class MicroMetrics
 				try{
 					$this->aggregator[$aggregator_name]=$aggregator->aggregate();
 				}
-				catch (Exception $e) {
-					$this->notify($e);
+				catch (\Exception $e) {
+					$error=array();
+					$error['name']=$aggregator_name;
+					$error['value']=$e;
+					$error['log_level']=E_ERROR;
+					$error['duration']=microtime(true)-(intval($this->getStartTime()));
+					$this->notify($error);
 				}
 			}
 
@@ -112,13 +122,18 @@ abstract class MicroMetrics
 		{
 			$sensor_name = $sensor->getName();
 			try{
-
 				$sensor_result = $sensor->validate($aggregator_data);
 				$this->saveLog($sensor_result);
+				$this->notify($sensor_result);
 				$response[$sensor_name] = $sensor_result;
 			}
-			catch (Exception $e) {
-				$this->notify($e);
+			catch (\Exception $e) {
+				$error=array();
+				$error['name']=$sensor_name;
+				$error['value']=$e;
+				$error['log_level']=E_ERROR;
+				$error['duration']=microtime(true)-(intval($this->getStartTime()));
+				$this->notify($error);
 			}
 		}
 		return $response;
@@ -132,7 +147,7 @@ abstract class MicroMetrics
 	 * this potentially override tasks set with MicroMetrics->addTask
 	 * @param array $aggregator_queue
 	 * @return array
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 	public function setAggregatorQueue($aggregator_queue)
 	{
@@ -141,7 +156,7 @@ abstract class MicroMetrics
 			$this->aggregatorQueue=$aggregator_queue;
 		}
 		else{
-			throw new Exception('MicroMetrics->setAggregatorQueue called with non-array parameter');
+			throw new \Exception('MicroMetrics->setAggregatorQueue called with non-array parameter', E_ERROR);
 		}
 		return $this->aggregatorQueue;
 	}
@@ -150,7 +165,7 @@ abstract class MicroMetrics
 	 * set a sensor to queue
 	 * @param array $sensor_queue
 	 * @return array $this->sensorQueue
-	 * @throws Exception
+	 * @throws \Exception
 	 */
 	public function setSensorQueue($sensor_queue)
 	{
@@ -159,7 +174,7 @@ abstract class MicroMetrics
 			$this->sensorQueue = $sensor_queue;
 		}
 		else{
-			throw new Exception('MicroMetrics->setAggregatorQueue called with non-array parameter');
+			throw new \Exception('MicroMetrics->setAggregatorQueue called with non-array parameter', E_ERROR);
 		}
 		return $this->sensorQueue;
 	}
