@@ -5,11 +5,12 @@ namespace CrazyFactory\MicroMetrics;
 
 abstract class MicroMetrics
 {
-	private $aggregator = array();
-	private $aggregatorQueue = array();
-	private $lastCheck;
-	private $sensorQueue= array();
-	private $treshold;
+	protected $aggregator = array();
+	protected $aggregatorQueue = array();
+	protected $lastCheck;
+	protected $sensorQueue= array();
+	protected $started;
+	protected $treshold;
 
 	/**
 	 * MicoMetrics constructor
@@ -20,6 +21,7 @@ abstract class MicroMetrics
 	{
 		$this->lastCheck = $last_checked;
 		$this->treshold = $treshold_in_minutes;
+		$this->started = microtime(true);
 	}
 
 	/**
@@ -52,6 +54,13 @@ abstract class MicroMetrics
 	{
 		return $this->aggregator;
 	}
+
+	/**
+	 * implements the notification via slack & email
+	 * @param array $data
+	 * @return bool
+	 */
+	abstract protected function notify($data);
 
 	/**
 	 * validates if we are ready to check again

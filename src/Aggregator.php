@@ -5,9 +5,9 @@ namespace CrazyFactory\MicroMetrics;
 
 abstract class Aggregator implements IMetrics
 {
-	private $name;
-	private $current;
-	private $previous;
+	protected $name;
+	protected $current;
+	protected $previous;
 
 	/**
 	 * Aggregator constructor.
