@@ -8,6 +8,9 @@ abstract class MicroMetrics
 	protected $aggregator = array();
 	protected $aggregatorQueue = array();
 	protected $lastCheck;
+	protected $log_error = array();
+	protected $log_ok = array();
+	protected $log_warning = array();
 	protected $sensorQueue= array();
 	protected $started;
 	protected $treshold;
@@ -124,7 +127,6 @@ abstract class MicroMetrics
 			try{
 				$sensor_result = $sensor->validate($aggregator_data);
 				$this->saveLog($sensor_result);
-				$this->notify($sensor_result);
 				$response[$sensor_name] = $sensor_result;
 			}
 			catch (\Exception $e) {
@@ -137,7 +139,6 @@ abstract class MicroMetrics
 			}
 		}
 		return $response;
-
 	}
 
 	abstract protected function saveLog($data);
@@ -179,5 +180,31 @@ abstract class MicroMetrics
 		return $this->sensorQueue;
 	}
 
+	/**
+	 * get a summary of the last Metrics run
+	 * @param string $type qualifies which logs we want, by default we get all
+	 * @return array
+	 */
+	public function getSummary($type='all')
+	{
+		$summary=array();
 
+		switch($type)
+		{
+			case 'ok':
+				$summary['ok']=$this->log_ok;
+				break;
+			case 'error':
+				$summary['error']=$this->log_error;
+				break;
+			case 'warning':
+				$summary['warning']=$this->log_warning;
+				break;
+			default:
+				$summary['ok']=$this->log_ok;
+				$summary['error']=$this->log_error;
+				$summary['warning']=$this->log_warning;
+		}
+		return $summary;
+	}
 }
