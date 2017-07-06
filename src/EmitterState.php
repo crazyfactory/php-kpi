@@ -6,6 +6,29 @@ namespace CrazyFactory\Kpi;
 class EmitterState
 {
     /**
+     * @param $array
+     *
+     * @return EmitterState
+     */
+    public static function fromArray($array)
+    {
+        $id = isset($array["id"])
+            ? $array["id"]
+            : null;
+        $level = isset($array["level"])
+            ? $array["level"]
+            : null;
+        $message = isset($array["message"])
+            ? $array["message"]
+            : null;
+        $timestamp = isset($array["timestamp"])
+            ? $array["timestamp"]
+            : null;
+
+        return new EmitterState($timestamp, $level, $message, $id);
+    }
+
+    /**
      * @var int $level
      */
     protected $level;
@@ -71,5 +94,18 @@ class EmitterState
     public function getLevel()
     {
         return $this->level;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return [
+            "id" => $this->id,
+            "level" => $this->level,
+            "message" => $this->message,
+            "timestamp" => $this->timestamp,
+        ];
     }
 }
