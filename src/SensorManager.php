@@ -1,6 +1,6 @@
 <?php
 
-namespace CrazyFactory\MicroMetrics;
+namespace CrazyFactory\Kpi;
 
 abstract class SensorManager
 {
@@ -60,7 +60,7 @@ abstract class SensorManager
 
             try {
                 $beginSensor = microtime(true);
-                /* @var \CrazyFactory\MicroMetrics\SensorInterface $sensor */
+                /* @var \CrazyFactory\Kpi\SensorInterface $sensor */
                 $sensor = new $className();
                 $lastState = isset($lastResult[$name])
                     ? $lastResult[$name]

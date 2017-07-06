@@ -1,6 +1,6 @@
 <?php
 
-namespace CrazyFactory\MicroMetrics;
+namespace CrazyFactory\Kpi;
 
 
 interface EmitterInterface

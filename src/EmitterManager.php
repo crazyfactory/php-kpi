@@ -1,6 +1,6 @@
 <?php
 
-namespace CrazyFactory\MicroMetrics;
+namespace CrazyFactory\Kpi;
 
 
 abstract class EmitterManager
@@ -64,7 +64,7 @@ abstract class EmitterManager
             }
 
             try {
-                /* @var \CrazyFactory\MicroMetrics\Emitter $emitter */
+                /* @var \CrazyFactory\Kpi\Emitter $emitter */
                 $emitter = new $className();
                 $emitter->setStateRetriever($this->stateManager);
                 $lastEmitterState = isset($lastEmitterManagerResult[$name])

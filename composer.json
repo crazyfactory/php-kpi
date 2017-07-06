@@ -1,13 +1,13 @@
 {
-  "name": "crazyfactory/php-micrometrics",
+  "name": "crazyfactory/kpi",
   "description": "",
   "type": "library",
   "keywords": [],
-  "homepage": "https://github.com/crazyfactory/php-micrometrics",
+  "homepage": "https://github.com/crazyfactory/php-kpi",
   "license": "GPL-3.0+",
   "autoload": {
     "psr-4": {
-      "CrazyFactory\\MicroMetrics\\": "src/"
+      "CrazyFactory\\Kpi\\": "src/"
     }
   },
   "autoload-dev": {
