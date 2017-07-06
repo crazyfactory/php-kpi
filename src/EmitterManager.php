@@ -40,17 +40,14 @@ abstract class EmitterManager
     }
 
     /**
-     * @param AggregatedSensorState|null $result
-     * @param AggregatedSensorState|null $lastResult
+     * @param AggregatedSensorState|null  $aggSensorState
+     * @param AggregatedSensorState|null  $lastAggSensorState
+     * @param AggregatedEmitterState|null $lastAggEmitterState
      *
      * @return AggregatedEmitterState
      * @throws \Exception
      */
-    public function aggregate(AggregatedSensorState $result = null, AggregatedSensorState $lastResult = null) {
-
-        $lastEmitterManagerResult = $this->stateManager
-            ? $this->stateManager->getLastAggregatedEmitterState()
-            : null;
+    public function aggregate(AggregatedSensorState $aggSensorState = null, AggregatedSensorState $lastAggSensorState = null, AggregatedEmitterState $lastAggEmitterState = null) {
 
         $begin = microtime(true);
         $map = $this->getEmitterMap();
@@ -67,12 +64,12 @@ abstract class EmitterManager
                 /* @var \CrazyFactory\Kpi\Emitter $emitter */
                 $emitter = new $className();
                 $emitter->setStateRetriever($this->stateManager);
-                $lastEmitterState = isset($lastEmitterManagerResult[$name])
-                    ? $lastEmitterManagerResult[$name]
+                $lastEmitterState = isset($lastAggEmitterState[$name])
+                    ? $lastAggEmitterState[$name]
                     : null;
 
                 $value = $emitter->shouldEmit($lastEmitterState)
-                    ? $emitter->emit($result, $lastResult, $lastEmitterState)
+                    ? $emitter->emit($aggSensorState, $lastAggSensorState, $lastEmitterState)
                     : $lastEmitterState;
 
                 $emitterStates[$name] = $value instanceof EmitterState
@@ -80,7 +77,7 @@ abstract class EmitterManager
                     : new EmitterState(time(), $value);
             }
             catch (\Exception $e) {
-                $result[$name] = null;
+                $aggSensorState[$name] = null;
             }
         }
 

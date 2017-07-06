@@ -5,20 +5,6 @@ namespace CrazyFactory\Kpi;
 abstract class SensorManager
 {
     /**
-     * @var StateManager $stateManager
-     */
-    protected $stateManager;
-
-    /**
-     * MetricsAggregator constructor.
-     *
-     * @param StateManager $stateManager
-     */
-    public function __construct(StateManager $stateManager = null) {
-        $this->stateManager = $stateManager;
-    }
-
-    /**
      * @return string[]
      */
     abstract protected function getSensorClasses();
@@ -39,14 +25,12 @@ abstract class SensorManager
     }
 
     /**
+     * @param AggregatedSensorState|null $aggSensorState
+     *
      * @return AggregatedSensorState
      * @throws \Exception
      */
-    public function aggregate() {
-
-        $lastResult = $this->stateManager
-            ? $this->stateManager->getLastAggregatedSensorState()
-            : null;
+    public function aggregate(AggregatedSensorState $aggSensorState = null) {
 
         $begin = microtime(true);
         $result = array();
@@ -62,8 +46,8 @@ abstract class SensorManager
                 $beginSensor = microtime(true);
                 /* @var \CrazyFactory\Kpi\SensorInterface $sensor */
                 $sensor = new $className();
-                $lastState = isset($lastResult[$name])
-                    ? $lastResult[$name]
+                $lastState = isset($aggSensorState[$name])
+                    ? $aggSensorState[$name]
                     : null;
 
                 $value = $sensor->shouldSense($lastState)
