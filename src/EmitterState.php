@@ -6,7 +6,7 @@ namespace CrazyFactory\Kpi;
 class EmitterState
 {
     /**
-     * @param $array
+     * @param array $array
      *
      * @return EmitterState
      */

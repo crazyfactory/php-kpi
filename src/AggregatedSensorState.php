@@ -8,6 +8,33 @@ use Traversable;
 class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
 {
     /**
+     * @param array $array
+     *
+     * @return AggregatedSensorState
+     */
+    public static function fromArray($array)
+    {
+        $sensors = null;
+        // We need to preserve the keys so we can't use array_map
+        if (isset($array['sensors']) && is_array($array['sensors'])) {
+            $sensors = [];
+            foreach ($array['sensors'] as $name => $data) {
+                $sensors[$name] = SensorState::fromArray($data);
+            }
+        }
+
+        $duration = isset($array['duration'])
+            ? $array['duration']
+            : null;
+
+        $timestamp = isset($array['timestamp'])
+            ? $array['timestamp']
+            : null;
+
+        return new AggregatedSensorState($sensors, $duration, $timestamp);
+    }
+
+    /**
      * @var SensorState[] $sensors
      */
     protected $sensors;
@@ -26,10 +53,10 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
      * AggregatedResult constructor.
      *
      * @param SensorState[] $sensors
-     * @param int      $duration
-     * @param int|null $timestamp
+     * @param int           $duration
+     * @param int|null      $timestamp
      */
-    public function __construct($sensors, $duration, $timestamp = null)
+    public function __construct($sensors = [], $duration = null, $timestamp = null)
     {
         $this->sensors = $sensors;
         $this->duration = $duration;
@@ -148,5 +175,24 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->sensors);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $sensors = null;
+        if (is_array($this->sensors)) {
+            foreach ($this->sensors as $name => $sensor) {
+                $sensors[$name] = $sensor->toArray();
+            }
+        }
+
+        return [
+            "duration" => $this->duration,
+            "timestamp" => $this->timestamp,
+            "sensors" => $sensors,
+        ];
     }
 }

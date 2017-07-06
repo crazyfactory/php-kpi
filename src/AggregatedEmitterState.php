@@ -8,6 +8,33 @@ use Traversable;
 class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
 {
     /**
+     * @param array $array
+     *
+     * @return AggregatedEmitterState
+     */
+    public static function fromArray($array)
+    {
+        $emitters = null;
+        // We need to preserve the keys so we can't use array_map
+        if (isset($array['emitters']) && is_array($array['emitters'])) {
+            $emitters = [];
+            foreach ($array['emitters'] as $name => $data) {
+                $emitters[$name] = EmitterState::fromArray($data);
+            }
+        }
+
+        $duration = isset($array['duration'])
+            ? $array['duration']
+            : null;
+
+        $timestamp = isset($array['timestamp'])
+            ? $array['timestamp']
+            : null;
+
+        return new AggregatedEmitterState($emitters, $duration, $timestamp);
+    }
+
+    /**
      * @var EmitterState[] $emitters
      */
     protected $emitters;
@@ -26,10 +53,10 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
      * AggregatedResult constructor.
      *
      * @param EmitterState[] $emitters
-     * @param int      $duration
-     * @param int|null $timestamp
+     * @param int            $duration
+     * @param int|null       $timestamp
      */
-    public function __construct($emitters, $duration, $timestamp = null)
+    public function __construct($emitters = [], $duration = null, $timestamp = null)
     {
         $this->emitters = $emitters;
         $this->duration = $duration;
@@ -148,5 +175,24 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->emitters);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $emitters = null;
+        if (is_array($this->emitters)) {
+            foreach ($this->emitters as $name => $emitter) {
+                $emitters[$name] = $emitter->toArray();
+            }
+        }
+
+        return [
+            "duration" => $this->duration,
+            "timestamp" => $this->timestamp,
+            "emitters" => $emitters,
+        ];
     }
 }
