@@ -8,6 +8,45 @@ use Traversable;
 class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
 {
     /**
+     * @param AggregatedEmitterState $aggState
+     * @param AggregatedEmitterState $lastAggState
+     *
+     * @return EmitterStateChange[]
+     */
+    public static function getStateChanges(AggregatedEmitterState $aggState, AggregatedEmitterState $lastAggState) {
+
+        // Get keys from both states if existing
+        $states = $aggState !== null
+            ? $aggState->emitters
+            : [];
+        $lastStates = $lastAggState !== null
+            ? $lastAggState
+            : [];
+
+        // Get all keys from both states
+        $keys = array_unique(array_merge(array_keys($states), array_keys($lastStates)));
+
+        // Compare elements from aggState and lastAggState by key and try create a EmitterStateChange instance.
+        $stateChanges = [];
+
+        foreach ($keys as $key) {
+            $emitterState = isset($states[$key])
+                ? $states[$key]
+                : null;
+            $lastEmitterState = isset($lastStates[$key])
+                ? $lastStates[$key]
+                : null;
+
+            if ($stateChanged = EmitterStateChange::createIfDifferent($emitterState, $lastEmitterState)) {
+                $stateChanged[$key] = $stateChanged;
+            }
+        }
+
+        // Return all created instances.
+        return $stateChanges;
+    }
+
+    /**
      * @param array $array
      *
      * @return AggregatedEmitterState
