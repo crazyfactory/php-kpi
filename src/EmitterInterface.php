@@ -17,7 +17,7 @@ interface EmitterInterface
      * @param AggregatedSensorState|null $lastResult
      * @param EmitterState|null          $lastState
      *
-     * @return EmitterState|int
+     * @return EmitterState|null
      */
     public function emit(AggregatedSensorState $result, AggregatedSensorState $lastResult, EmitterState $lastState = null);
 

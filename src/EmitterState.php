@@ -5,6 +5,27 @@ namespace CrazyFactory\Kpi;
 
 class EmitterState
 {
+    const CRITICAL = LOG_CRIT; // 2
+    const WARNING = LOG_WARNING; // 4
+    const INFO = LOG_INFO; // 6
+
+    const NONE = LOG_SYSLOG; // 40
+
+    public static function stateToString($level) {
+        switch ($level) {
+            case self::CRITICAL:
+                return 'CRITICAL';
+            case self::WARNING:
+                return 'WARNING';
+            case self::INFO:
+                return 'INFO';
+            case self::NONE:
+                return 'NONE';
+        }
+
+        return 'UNKNOWN-' . $level;
+    }
+
     /**
      * @param array $array
      *
@@ -56,7 +77,7 @@ class EmitterState
      * @param string|null $message
      * @param int|null    $id
      */
-    public function __construct($timestamp, $level = LOG_INFO, $message = null, $id = null)
+    public function __construct($timestamp, $level = LOG_SYSLOG, $message = null, $id = null)
     {
         $this->timestamp = $timestamp;
         $this->level = $level;
