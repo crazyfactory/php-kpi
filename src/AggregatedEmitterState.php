@@ -13,7 +13,8 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
      *
      * @return EmitterStateChange[]
      */
-    public static function getStateChanges(AggregatedEmitterState $aggState, AggregatedEmitterState $lastAggState) {
+    public static function getStateChanges(AggregatedEmitterState $aggState, AggregatedEmitterState $lastAggState)
+    {
 
         // Get names from both states if existing
         $states = $aggState !== null
@@ -143,6 +144,27 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $list = null;
+        if (is_array($this->emitters)) {
+            $list = [];
+            foreach ($this->emitters as $name => $emitter) {
+                $list[$name] = $emitter->toArray();
+            }
+        }
+
+        return [
+            "duration" => $this->duration,
+            "timestamp" => $this->timestamp,
+            "emitters" => $list,
+            "level" => $this->getLevel()
+        ];
+    }
+
+    /**
      * Whether a offset exists
      *
      * @link  http://php.net/manual/en/arrayaccess.offsetexists.php
@@ -229,24 +251,5 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->emitters);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        $emitters = null;
-        if (is_array($this->emitters)) {
-            foreach ($this->emitters as $name => $emitter) {
-                $emitters[$name] = $emitter->toArray();
-            }
-        }
-
-        return [
-            "duration" => $this->duration,
-            "timestamp" => $this->timestamp,
-            "emitters" => $emitters,
-        ];
     }
 }

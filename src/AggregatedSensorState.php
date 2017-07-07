@@ -15,6 +15,7 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
     public static function fromArray($array)
     {
         $sensors = null;
+
         // We need to preserve the keys so we can't use array_map
         if (isset($array['sensors']) && is_array($array['sensors'])) {
             $sensors = [];
@@ -86,6 +87,26 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
     public function getSensors()
     {
         return $this->sensors;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $list = null;
+        if (is_array($this->sensors)) {
+            $list = [];
+            foreach ($this->sensors as $name => $sensor) {
+                $list[$name] = $sensor->toArray();
+            }
+        }
+
+        return [
+            "duration" => $this->duration,
+            "timestamp" => $this->timestamp,
+            "sensors" => $list,
+        ];
     }
 
     /**
@@ -175,24 +196,5 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
     public function getIterator()
     {
         return new \ArrayIterator($this->sensors);
-    }
-
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        $sensors = null;
-        if (is_array($this->sensors)) {
-            foreach ($this->sensors as $name => $sensor) {
-                $sensors[$name] = $sensor->toArray();
-            }
-        }
-
-        return [
-            "duration" => $this->duration,
-            "timestamp" => $this->timestamp,
-            "sensors" => $sensors,
-        ];
     }
 }
