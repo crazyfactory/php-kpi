@@ -17,10 +17,10 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
 
         // Get names from both states if existing
         $states = $aggState !== null
-            ? $aggState->emitters
+            ? $aggState->getEmitters()
             : [];
         $lastStates = $lastAggState !== null
-            ? $lastAggState
+            ? $lastAggState->getEmitters()
             : [];
 
         // Get all names from both states
