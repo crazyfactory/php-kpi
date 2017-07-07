@@ -128,6 +128,21 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
+     * @return int|null
+     */
+    public function getLevel() {
+        $level = null;
+        foreach ($this->emitters as $emitter) {
+            $escLevel = $emitter->getLevel();
+            if ($escLevel !== null && ($level === null || $escLevel < $level)) {
+                $level = $escLevel;
+            }
+        }
+
+        return $level;
+    }
+
+    /**
      * Whether a offset exists
      *
      * @link  http://php.net/manual/en/arrayaccess.offsetexists.php
