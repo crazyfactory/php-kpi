@@ -12,9 +12,6 @@ class SensorState
      */
     public static function fromArray($array)
     {
-        $name = isset($array["name"])
-            ? $array["name"]
-            : null;
         $value = isset($array["value"])
             ? $array["value"]
             : null;
@@ -25,7 +22,7 @@ class SensorState
             ? $array["timestamp"]
             : null;
 
-        return new SensorState($name, $value, $duration, $timestamp);
+        return new SensorState($value, $duration, $timestamp);
     }
 
     /**
@@ -51,16 +48,14 @@ class SensorState
     /**
      * SensorState constructor.
      *
-     * @param string $name
      * @param string $value
      * @param float  $duration
      * @param int    $timestamp
      */
-    public function __construct($name, $value, $duration, $timestamp)
+    public function __construct($value, $duration, $timestamp)
     {
         $this->timestamp = $timestamp;
         $this->value = $value;
-        $this->name = $name;
         $this->duration = $duration;
     }
 
@@ -89,20 +84,11 @@ class SensorState
     }
 
     /**
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
      * @return array
      */
     public function toArray()
     {
         return [
-            "name" => $this->name,
             "value" => $this->value,
             "duration" => $this->duration,
             "timestamp" => $this->timestamp,
