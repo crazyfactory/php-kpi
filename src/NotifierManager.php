@@ -17,7 +17,7 @@ abstract class NotifierManager
 
         foreach ($map as $name => $classNameOrInstance) {
             // Sensors should really exist. This is a rare case where a complete stop is welcome.
-            if (!class_exists($classNameOrInstance)) {
+            if (!is_object($classNameOrInstance) && !class_exists($classNameOrInstance)) {
                 throw new \Exception("notifier class " . $name . " not found");
             }
 

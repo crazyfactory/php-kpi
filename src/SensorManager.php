@@ -12,21 +12,22 @@ abstract class SensorManager
      */
     public function aggregate(AggregatedSensorState $aggSensorState = null)
     {
-
         $begin = microtime(true);
         $result = [];
         $map = $this->getSensorMap();
 
-        foreach ($map as $name => $className) {
+        foreach ($map as $name => $classNameOrInstance) {
             // Sensors should really exist. This is a rare case where a complete stop is welcome.
-            if (!class_exists($className)) {
+            if (!is_object($classNameOrInstance) && !class_exists($classNameOrInstance)) {
                 throw new \Exception("sensor class " . $name . " not found");
             }
 
             try {
                 $beginSensor = microtime(true);
                 /* @var \CrazyFactory\Kpi\SensorInterface $sensor */
-                $sensor = new $className();
+                $sensor = $classNameOrInstance instanceof SensorInterface
+                    ? $classNameOrInstance
+                    : new $classNameOrInstance();
                 $lastState = isset($aggSensorState[$name])
                     ? $aggSensorState[$name]
                     : null;
@@ -48,23 +49,25 @@ abstract class SensorManager
     }
 
     /**
-     * @return string[]
+     * @return string[]|object[]
      */
     protected function getSensorMap()
     {
-
         $map = [];
-        $classes = $this->getSensorClasses();
-        foreach ($classes as $className) {
+        $classes = $this->getSensors();
+        foreach ($classes as $classNameOrInstance) {
+            $className = $classNameOrInstance instanceof SensorInterface
+                ? get_class($classNameOrInstance)
+                : $classNameOrInstance;
             $name = substr($className, strrpos($className, "\\") + 1, -strlen('Sensor'));
-            $map[$name] = $className;
+            $map[$name] = $classNameOrInstance;
         }
 
         return $map;
     }
 
     /**
-     * @return string[]
+     * @return string[]|object[]
      */
-    abstract protected function getSensorClasses();
+    abstract protected function getSensors();
 }

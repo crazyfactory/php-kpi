@@ -30,21 +30,22 @@ abstract class EmitterManager
      */
     public function aggregate(AggregatedSensorState $aggSensorState = null, AggregatedSensorState $lastAggSensorState = null, AggregatedEmitterState $lastAggEmitterState = null)
     {
-
         $begin = microtime(true);
         $map = $this->getEmitterMap();
 
         $emitterStates = [];
 
-        foreach ($map as $name => $className) {
+        foreach ($map as $name => $classNameOrInstance) {
             // Sensors should really exist. This is a rare case where a complete stop is welcome.
-            if (!class_exists($className)) {
+            if (!is_object($classNameOrInstance) && !class_exists($classNameOrInstance)) {
                 throw new \Exception("emitter class " . $name . " not found");
             }
 
             try {
                 /* @var \CrazyFactory\Kpi\Emitter $emitter */
-                $emitter = new $className();
+                $emitter = $classNameOrInstance instanceof EmitterInterface
+                    ? $classNameOrInstance
+                    : new $classNameOrInstance();
                 $emitter->setStateRetriever($this->stateManager);
                 $lastEmitterState = isset($lastAggEmitterState[$name])
                     ? $lastAggEmitterState[$name]
@@ -68,23 +69,26 @@ abstract class EmitterManager
     }
 
     /**
-     * @return string[]
+     * @return string[]|object[]
      */
     protected function getEmitterMap()
     {
-
         $map = [];
-        $classes = $this->getEmitterClasses();
-        foreach ($classes as $className) {
+        $classes = $this->getEmitters();
+        foreach ($classes as $classNameOrInstance) {
+            $className = $classNameOrInstance instanceof EmitterInterface
+                ? get_class($classNameOrInstance)
+                : $classNameOrInstance;
+
             $name = substr($className, strrpos($className, "\\") + 1, -strlen('Emitter'));
-            $map[$name] = $className;
+            $map[$name] = $classNameOrInstance;
         }
 
         return $map;
     }
 
     /**
-     * @return string[]
+     * @return string[]|object[]
      */
-    abstract protected function getEmitterClasses();
+    abstract protected function getEmitters();
 }
