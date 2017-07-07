@@ -17,8 +17,8 @@ abstract class SensorManager
         $map = [];
         $classes = $this->getSensorClasses();
         foreach ($classes as $className) {
-            $key = substr($className, strrpos($className, "\\") + 1, -strlen('Sensor'));
-            $map[$key] = $className;
+            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Sensor'));
+            $map[$name] = $className;
         }
 
         return $map;

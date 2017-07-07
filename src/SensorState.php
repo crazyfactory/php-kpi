@@ -12,8 +12,8 @@ class SensorState
      */
     public static function fromArray($array)
     {
-        $key = isset($array["key"])
-            ? $array["key"]
+        $name = isset($array["name"])
+            ? $array["name"]
             : null;
         $value = isset($array["value"])
             ? $array["value"]
@@ -25,13 +25,13 @@ class SensorState
             ? $array["timestamp"]
             : null;
 
-        return new SensorState($key, $value, $duration, $timestamp);
+        return new SensorState($name, $value, $duration, $timestamp);
     }
 
     /**
-     * @var string $key
+     * @var string $name
      */
-    protected $key;
+    protected $name;
 
     /**
      * @var string $value
@@ -51,16 +51,16 @@ class SensorState
     /**
      * SensorState constructor.
      *
-     * @param string $key
+     * @param string $name
      * @param string $value
      * @param float  $duration
      * @param int    $timestamp
      */
-    public function __construct($key, $value, $duration, $timestamp)
+    public function __construct($name, $value, $duration, $timestamp)
     {
         $this->timestamp = $timestamp;
         $this->value = $value;
-        $this->key = $key;
+        $this->name = $name;
         $this->duration = $duration;
     }
 
@@ -91,9 +91,9 @@ class SensorState
     /**
      * @return string
      */
-    public function getKey()
+    public function getName()
     {
-        return $this->key;
+        return $this->name;
     }
 
     /**
@@ -102,7 +102,7 @@ class SensorState
     public function toArray()
     {
         return [
-            "key" => $this->key,
+            "name" => $this->name,
             "value" => $this->value,
             "duration" => $this->duration,
             "timestamp" => $this->timestamp,

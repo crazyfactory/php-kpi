@@ -32,8 +32,8 @@ abstract class EmitterManager
         $map = [];
         $classes = $this->getEmitterClasses();
         foreach ($classes as $className) {
-            $key = substr($className, strrpos($className, "\\") + 1, -strlen('Emitter'));
-            $map[$key] = $className;
+            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Emitter'));
+            $map[$name] = $className;
         }
 
         return $map;

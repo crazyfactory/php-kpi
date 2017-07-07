@@ -15,7 +15,7 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
      */
     public static function getStateChanges(AggregatedEmitterState $aggState, AggregatedEmitterState $lastAggState) {
 
-        // Get keys from both states if existing
+        // Get names from both states if existing
         $states = $aggState !== null
             ? $aggState->emitters
             : [];
@@ -23,22 +23,22 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
             ? $lastAggState
             : [];
 
-        // Get all keys from both states
-        $keys = array_unique(array_merge(array_keys($states), array_keys($lastStates)));
+        // Get all names from both states
+        $names = array_unique(array_merge(array_keys($states), array_keys($lastStates)));
 
-        // Compare elements from aggState and lastAggState by key and try create a EmitterStateChange instance.
+        // Compare elements from aggState and lastAggState by name and try create a EmitterStateChange instance.
         $stateChanges = [];
 
-        foreach ($keys as $key) {
-            $emitterState = isset($states[$key])
-                ? $states[$key]
+        foreach ($names as $name) {
+            $emitterState = isset($states[$name])
+                ? $states[$name]
                 : null;
-            $lastEmitterState = isset($lastStates[$key])
-                ? $lastStates[$key]
+            $lastEmitterState = isset($lastStates[$name])
+                ? $lastStates[$name]
                 : null;
 
             if ($stateChanged = EmitterStateChange::createIfDifferent($emitterState, $lastEmitterState)) {
-                $stateChanged[$key] = $stateChanged;
+                $stateChanged[$name] = $stateChanged;
             }
         }
 
@@ -54,7 +54,7 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     public static function fromArray($array)
     {
         $emitters = null;
-        // We need to preserve the keys so we can't use array_map
+        // We need to preserve the names so we can't use array_map
         if (isset($array['emitters']) && is_array($array['emitters'])) {
             $emitters = [];
             foreach ($array['emitters'] as $name => $data) {
