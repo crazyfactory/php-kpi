@@ -8,6 +8,34 @@ use Traversable;
 class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
 {
     /**
+     * @var EmitterState[] $emitters
+     */
+    protected $emitters;
+    /**
+     * @var int $duration
+     */
+    protected $duration;
+    /**
+     * @var int $timestamp
+     */
+    protected $timestamp;
+
+    /**
+     * AggregatedResult constructor.
+     *
+     * @param EmitterState[] $emitters
+     * @param int            $duration
+     * @param int|null       $timestamp
+     */
+    public function __construct($emitters = [], $duration = null, $timestamp = null)
+    {
+        $this->emitters = $emitters;
+        $this->duration = $duration;
+        $this->timestamp = $timestamp
+            ?: time();
+    }
+
+    /**
      * @param AggregatedEmitterState $aggState
      * @param AggregatedEmitterState $lastAggState
      *
@@ -48,6 +76,14 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
+     * @return EmitterState[]
+     */
+    public function getEmitters()
+    {
+        return $this->emitters;
+    }
+
+    /**
      * @param array $array
      *
      * @return AggregatedEmitterState
@@ -75,36 +111,6 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     }
 
     /**
-     * @var EmitterState[] $emitters
-     */
-    protected $emitters;
-
-    /**
-     * @var int $duration
-     */
-    protected $duration;
-
-    /**
-     * @var int $timestamp
-     */
-    protected $timestamp;
-
-    /**
-     * AggregatedResult constructor.
-     *
-     * @param EmitterState[] $emitters
-     * @param int            $duration
-     * @param int|null       $timestamp
-     */
-    public function __construct($emitters = [], $duration = null, $timestamp = null)
-    {
-        $this->emitters = $emitters;
-        $this->duration = $duration;
-        $this->timestamp = $timestamp
-            ?: time();
-    }
-
-    /**
      * @return int
      */
     public function getTimestamp()
@@ -118,29 +124,6 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     public function getDuration()
     {
         return $this->duration;
-    }
-
-    /**
-     * @return EmitterState[]
-     */
-    public function getEmitters()
-    {
-        return $this->emitters;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getLevel() {
-        $level = null;
-        foreach ($this->emitters as $emitter) {
-            $escLevel = $emitter->getLevel();
-            if ($escLevel !== null && ($level === null || $escLevel < $level)) {
-                $level = $escLevel;
-            }
-        }
-
-        return $level;
     }
 
     /**
@@ -160,8 +143,24 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
             "duration" => $this->duration,
             "timestamp" => $this->timestamp,
             "emitters" => $list,
-            "level" => $this->getLevel()
+            "level" => $this->getLevel(),
         ];
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getLevel()
+    {
+        $level = null;
+        foreach ($this->emitters as $emitter) {
+            $escLevel = $emitter->getLevel();
+            if ($escLevel !== null && ($level === null || $escLevel < $level)) {
+                $level = $escLevel;
+            }
+        }
+
+        return $level;
     }
 
     /**

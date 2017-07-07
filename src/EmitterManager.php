@@ -15,28 +15,9 @@ abstract class EmitterManager
      *
      * @param StateManager $stateManager
      */
-    public function __construct(StateManager $stateManager = null) {
+    public function __construct(StateManager $stateManager = null)
+    {
         $this->stateManager = $stateManager;
-    }
-
-    /**
-     * @return string[]
-     */
-    abstract protected function getEmitterClasses();
-
-    /**
-     * @return string[]
-     */
-    protected function getEmitterMap() {
-
-        $map = [];
-        $classes = $this->getEmitterClasses();
-        foreach ($classes as $className) {
-            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Emitter'));
-            $map[$name] = $className;
-        }
-
-        return $map;
     }
 
     /**
@@ -47,7 +28,8 @@ abstract class EmitterManager
      * @return AggregatedEmitterState
      * @throws \Exception
      */
-    public function aggregate(AggregatedSensorState $aggSensorState = null, AggregatedSensorState $lastAggSensorState = null, AggregatedEmitterState $lastAggEmitterState = null) {
+    public function aggregate(AggregatedSensorState $aggSensorState = null, AggregatedSensorState $lastAggSensorState = null, AggregatedEmitterState $lastAggEmitterState = null)
+    {
 
         $begin = microtime(true);
         $map = $this->getEmitterMap();
@@ -75,13 +57,34 @@ abstract class EmitterManager
                 $emitterStates[$name] = $value instanceof EmitterState
                     ? $value
                     : new EmitterState(time(), $value);
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $aggSensorState[$name] = null;
             }
         }
 
         $duration = microtime(true) - $begin;
+
         return new AggregatedEmitterState($emitterStates, $duration, time());
     }
+
+    /**
+     * @return string[]
+     */
+    protected function getEmitterMap()
+    {
+
+        $map = [];
+        $classes = $this->getEmitterClasses();
+        foreach ($classes as $className) {
+            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Emitter'));
+            $map[$name] = $className;
+        }
+
+        return $map;
+    }
+
+    /**
+     * @return string[]
+     */
+    abstract protected function getEmitterClasses();
 }

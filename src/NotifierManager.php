@@ -7,30 +7,6 @@ abstract class NotifierManager
 {
 
     /**
-     * @return string[]|object[]
-     */
-    abstract protected function getNotifiers();
-
-    /**
-     * @return string|object[]
-     */
-    protected function getNotifierMap()
-    {
-        $map = [];
-        $classes = $this->getNotifiers();
-        foreach ($classes as $classNameOrInstance) {
-            $className = $classNameOrInstance instanceof NotifierInterface
-                ? get_class($classNameOrInstance)
-                : $classNameOrInstance;
-
-            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Notifier'));
-            $map[$name] = $classNameOrInstance;
-        }
-
-        return $map;
-    }
-
-    /**
      * @param AggregatedEmitterStateChange $aggregatedEmitterStateChange
      *
      * @throws \Exception
@@ -53,4 +29,28 @@ abstract class NotifierManager
             $notifier->notify($aggregatedEmitterStateChange);
         }
     }
+
+    /**
+     * @return string|object[]
+     */
+    protected function getNotifierMap()
+    {
+        $map = [];
+        $classes = $this->getNotifiers();
+        foreach ($classes as $classNameOrInstance) {
+            $className = $classNameOrInstance instanceof NotifierInterface
+                ? get_class($classNameOrInstance)
+                : $classNameOrInstance;
+
+            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Notifier'));
+            $map[$name] = $classNameOrInstance;
+        }
+
+        return $map;
+    }
+
+    /**
+     * @return string[]|object[]
+     */
+    abstract protected function getNotifiers();
 }

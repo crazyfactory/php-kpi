@@ -11,7 +11,8 @@ abstract class Emitter implements EmitterInterface
     /**
      * @param StateRetrieverInterface|null $stateRetriever
      */
-    public function setStateRetriever(StateRetrieverInterface $stateRetriever = null) {
+    public function setStateRetriever(StateRetrieverInterface $stateRetriever = null)
+    {
         $this->stateRetriever = $stateRetriever;
     }
 }

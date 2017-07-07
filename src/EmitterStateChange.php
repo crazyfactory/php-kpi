@@ -5,13 +5,31 @@ namespace CrazyFactory\Kpi;
 
 class EmitterStateChange
 {
+    /** @var $lastState EmitterState */
+    protected $lastState;
+    /** @var $state EmitterState */
+    protected $state;
+
+    /**
+     * EmitterStateChange constructor.
+     *
+     * @param EmitterState $state
+     * @param EmitterState $lastState
+     */
+    public function __construct(EmitterState $state, EmitterState $lastState)
+    {
+        $this->state = $state;
+        $this->lastState = $lastState;
+    }
+
     /**
      * @param EmitterState $state
      * @param EmitterState $lastState
      *
      * @return EmitterStateChange
      */
-    public static function createIfDifferent(EmitterState $state, EmitterState $lastState) {
+    public static function createIfDifferent(EmitterState $state, EmitterState $lastState)
+    {
         // Exactly one state is actually null.
         if ($state === null xor $lastState === null) {
             return new EmitterStateChange($state, $lastState);
@@ -23,23 +41,6 @@ class EmitterStateChange
         }
 
         return null;
-    }
-
-    /** @var $lastState EmitterState */
-    protected $lastState;
-
-    /** @var $state EmitterState */
-    protected $state;
-
-    /**
-     * EmitterStateChange constructor.
-     *
-     * @param EmitterState $state
-     * @param EmitterState $lastState
-     */
-    public function __construct(EmitterState $state, EmitterState $lastState) {
-        $this->state = $state;
-        $this->lastState = $lastState;
     }
 
     /**

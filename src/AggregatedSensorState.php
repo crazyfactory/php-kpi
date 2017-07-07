@@ -8,6 +8,34 @@ use Traversable;
 class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
 {
     /**
+     * @var SensorState[] $sensors
+     */
+    protected $sensors;
+    /**
+     * @var int $duration
+     */
+    protected $duration;
+    /**
+     * @var int $timestamp
+     */
+    protected $timestamp;
+
+    /**
+     * AggregatedResult constructor.
+     *
+     * @param SensorState[] $sensors
+     * @param int           $duration
+     * @param int|null      $timestamp
+     */
+    public function __construct($sensors = [], $duration = null, $timestamp = null)
+    {
+        $this->sensors = $sensors;
+        $this->duration = $duration;
+        $this->timestamp = $timestamp
+            ?: time();
+    }
+
+    /**
      * @param array $array
      *
      * @return AggregatedSensorState
@@ -33,36 +61,6 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
             : null;
 
         return new AggregatedSensorState($sensors, $duration, $timestamp);
-    }
-
-    /**
-     * @var SensorState[] $sensors
-     */
-    protected $sensors;
-
-    /**
-     * @var int $duration
-     */
-    protected $duration;
-
-    /**
-     * @var int $timestamp
-     */
-    protected $timestamp;
-
-    /**
-     * AggregatedResult constructor.
-     *
-     * @param SensorState[] $sensors
-     * @param int           $duration
-     * @param int|null      $timestamp
-     */
-    public function __construct($sensors = [], $duration = null, $timestamp = null)
-    {
-        $this->sensors = $sensors;
-        $this->duration = $duration;
-        $this->timestamp = $timestamp
-            ?: time();
     }
 
     /**

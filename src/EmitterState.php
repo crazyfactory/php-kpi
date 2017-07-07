@@ -10,8 +10,41 @@ class EmitterState
     const INFO = LOG_INFO; // 6
 
     const NONE = LOG_SYSLOG; // 40
+    /**
+     * @var int $level
+     */
+    protected $level;
+    /**
+     * @var string $message
+     */
+    protected $message;
+    /**
+     * @var int $id
+     */
+    protected $id;
+    /**
+     * @var int $timestamp
+     */
+    protected $timestamp;
 
-    public static function stateToString($level) {
+    /**
+     * EmitterState constructor.
+     *
+     * @param int         $timestamp
+     * @param int|null    $level
+     * @param string|null $message
+     * @param int|null    $id
+     */
+    public function __construct($timestamp, $level = LOG_SYSLOG, $message = null, $id = null)
+    {
+        $this->timestamp = $timestamp;
+        $this->level = $level;
+        $this->message = $message;
+        $this->id = $id;
+    }
+
+    public static function stateToString($level)
+    {
         switch ($level) {
             case self::CRITICAL:
                 return 'CRITICAL';
@@ -47,42 +80,6 @@ class EmitterState
             : null;
 
         return new EmitterState($timestamp, $level, $message, $id);
-    }
-
-    /**
-     * @var int $level
-     */
-    protected $level;
-
-    /**
-     * @var string $message
-     */
-    protected $message;
-
-    /**
-     * @var int $id
-     */
-    protected $id;
-
-    /**
-     * @var int $timestamp
-     */
-    protected $timestamp;
-
-    /**
-     * EmitterState constructor.
-     *
-     * @param int         $timestamp
-     * @param int|null    $level
-     * @param string|null $message
-     * @param int|null    $id
-     */
-    public function __construct($timestamp, $level = LOG_SYSLOG, $message = null, $id = null)
-    {
-        $this->timestamp = $timestamp;
-        $this->level = $level;
-        $this->message = $message;
-        $this->id = $id;
     }
 
     /**

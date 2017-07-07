@@ -5,35 +5,16 @@ namespace CrazyFactory\Kpi;
 abstract class SensorManager
 {
     /**
-     * @return string[]
-     */
-    abstract protected function getSensorClasses();
-
-    /**
-     * @return string[]
-     */
-    protected function getSensorMap() {
-
-        $map = [];
-        $classes = $this->getSensorClasses();
-        foreach ($classes as $className) {
-            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Sensor'));
-            $map[$name] = $className;
-        }
-
-        return $map;
-    }
-
-    /**
      * @param AggregatedSensorState|null $aggSensorState
      *
      * @return AggregatedSensorState
      * @throws \Exception
      */
-    public function aggregate(AggregatedSensorState $aggSensorState = null) {
+    public function aggregate(AggregatedSensorState $aggSensorState = null)
+    {
 
         $begin = microtime(true);
-        $result = array();
+        $result = [];
         $map = $this->getSensorMap();
 
         foreach ($map as $name => $className) {
@@ -56,13 +37,34 @@ abstract class SensorManager
                 $sensorDuration = microtime(true) - $beginSensor;
 
                 $result[$name] = new SensorState($name, $value, $sensorDuration, time());
-            }
-            catch (\Exception $e) {
+            } catch (\Exception $e) {
                 $result[$name] = null;
             }
         }
 
         $duration = microtime(true) - $begin;
+
         return new AggregatedSensorState($result, $duration, time());
     }
+
+    /**
+     * @return string[]
+     */
+    protected function getSensorMap()
+    {
+
+        $map = [];
+        $classes = $this->getSensorClasses();
+        foreach ($classes as $className) {
+            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Sensor'));
+            $map[$name] = $className;
+        }
+
+        return $map;
+    }
+
+    /**
+     * @return string[]
+     */
+    abstract protected function getSensorClasses();
 }

@@ -12,7 +12,7 @@ interface SensorInterface
      *
      * @return string
      */
-	public function sense(SensorState $lastState = null);
+    public function sense(SensorState $lastState = null);
 
     /**
      * @param SensorState|null $lastState
