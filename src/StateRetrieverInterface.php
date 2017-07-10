@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 interface StateRetrieverInterface
 {
     /**

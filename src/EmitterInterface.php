@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 interface EmitterInterface
 {
     /**
@@ -19,7 +18,11 @@ interface EmitterInterface
      *
      * @return EmitterState|null
      */
-    public function emit(AggregatedSensorState $result, AggregatedSensorState $lastResult, EmitterState $lastState = null);
+    public function emit(
+        AggregatedSensorState $result,
+        AggregatedSensorState $lastResult,
+        EmitterState $lastState = null
+    );
 
     /**
      * @param EmitterState|null $lastState

@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 class EmitterState
 {
     const CRITICAL = LOG_CRIT; // 2
@@ -66,17 +65,17 @@ class EmitterState
      */
     public static function fromArray($array)
     {
-        $id = isset($array["id"])
-            ? $array["id"]
+        $id = isset($array['id'])
+            ? $array['id']
             : null;
-        $level = isset($array["level"])
-            ? $array["level"]
+        $level = isset($array['level'])
+            ? $array['level']
             : null;
-        $message = isset($array["message"])
-            ? $array["message"]
+        $message = isset($array['message'])
+            ? $array['message']
             : null;
-        $timestamp = isset($array["timestamp"])
-            ? $array["timestamp"]
+        $timestamp = isset($array['timestamp'])
+            ? $array['timestamp']
             : null;
 
         return new EmitterState($timestamp, $level, $message, $id);
@@ -120,10 +119,10 @@ class EmitterState
     public function toArray()
     {
         return [
-            "id" => $this->id,
-            "level" => $this->level,
-            "message" => $this->message,
-            "timestamp" => $this->timestamp,
+            'id' => $this->id,
+            'level' => $this->level,
+            'message' => $this->message,
+            'timestamp' => $this->timestamp,
         ];
     }
 }

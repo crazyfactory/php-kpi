@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 use Traversable;
 
 class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
@@ -101,9 +100,9 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
         }
 
         return [
-            "duration" => $this->duration,
-            "timestamp" => $this->timestamp,
-            "sensors" => $list,
+            'duration' => $this->duration,
+            'timestamp' => $this->timestamp,
+            'sensors' => $list,
         ];
     }
 
@@ -162,7 +161,7 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetSet($offset, $value)
     {
-        throw new \Exception("immutable");
+        throw new \Exception('immutable');
     }
 
     /**
@@ -180,7 +179,7 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        throw new \Exception("immutable");
+        throw new \Exception('immutable');
     }
 
     /**

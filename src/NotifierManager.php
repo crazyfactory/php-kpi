@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 abstract class NotifierManager
 {
 
@@ -18,7 +17,7 @@ abstract class NotifierManager
         foreach ($map as $name => $classNameOrInstance) {
             // Sensors should really exist. This is a rare case where a complete stop is welcome.
             if (!is_object($classNameOrInstance) && !class_exists($classNameOrInstance)) {
-                throw new \Exception("notifier class " . $name . " not found");
+                throw new \Exception('notifier class ' . $name . ' not found');
             }
 
             /* @var \CrazyFactory\Kpi\NotifierInterface $notifier */
@@ -42,7 +41,7 @@ abstract class NotifierManager
                 ? get_class($classNameOrInstance)
                 : $classNameOrInstance;
 
-            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Notifier'));
+            $name = substr($className, strrpos($className, '\\') + 1, -strlen('Notifier'));
             $map[$name] = $classNameOrInstance;
         }
 

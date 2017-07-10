@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 abstract class EmitterManager
 {
     /**
@@ -28,8 +27,11 @@ abstract class EmitterManager
      * @return AggregatedEmitterState
      * @throws \Exception
      */
-    public function aggregate(AggregatedSensorState $aggSensorState = null, AggregatedSensorState $lastAggSensorState = null, AggregatedEmitterState $lastAggEmitterState = null)
-    {
+    public function aggregate(
+        AggregatedSensorState $aggSensorState = null,
+        AggregatedSensorState $lastAggSensorState = null,
+        AggregatedEmitterState $lastAggEmitterState = null
+    ) {
         $begin = microtime(true);
         $map = $this->getEmitterMap();
 
@@ -38,7 +40,7 @@ abstract class EmitterManager
         foreach ($map as $name => $classNameOrInstance) {
             // Sensors should really exist. This is a rare case where a complete stop is welcome.
             if (!is_object($classNameOrInstance) && !class_exists($classNameOrInstance)) {
-                throw new \Exception("emitter class " . $name . " not found");
+                throw new \Exception('emitter class ' . $name . ' not found');
             }
 
             try {
@@ -58,7 +60,8 @@ abstract class EmitterManager
                 $emitterStates[$name] = $value instanceof EmitterState
                     ? $value
                     : new EmitterState(time(), $value);
-            } catch (\Exception $e) {
+            }
+            catch (\Exception $e) {
                 $aggSensorState[$name] = null;
             }
         }
@@ -80,7 +83,7 @@ abstract class EmitterManager
                 ? get_class($classNameOrInstance)
                 : $classNameOrInstance;
 
-            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Emitter'));
+            $name = substr($className, strrpos($className, '\\') + 1, -strlen('Emitter'));
             $map[$name] = $classNameOrInstance;
         }
 

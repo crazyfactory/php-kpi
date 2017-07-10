@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 abstract class Emitter implements EmitterInterface
 {
     /** @var StateRetrieverInterface $stateRetriever */

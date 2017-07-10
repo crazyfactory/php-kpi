@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 use Traversable;
 
 class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
@@ -140,10 +139,10 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
         }
 
         return [
-            "duration" => $this->duration,
-            "timestamp" => $this->timestamp,
-            "emitters" => $list,
-            "level" => $this->getLevel(),
+            'duration' => $this->duration,
+            'timestamp' => $this->timestamp,
+            'emitters' => $list,
+            'level' => $this->getLevel(),
         ];
     }
 
@@ -218,7 +217,7 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetSet($offset, $value)
     {
-        throw new \Exception("immutable");
+        throw new \Exception('immutable');
     }
 
     /**
@@ -236,7 +235,7 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        throw new \Exception("immutable");
+        throw new \Exception('immutable');
     }
 
     /**
