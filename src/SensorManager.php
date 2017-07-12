@@ -37,7 +37,7 @@ abstract class SensorManager
                     : $lastState;
                 $sensorDuration = microtime(true) - $beginSensor;
 
-                $result[$name] = new SensorState($name, $value, $sensorDuration, time());
+                $result[$name] = new SensorState($value, $sensorDuration, time());
             } catch (\Exception $e) {
                 $result[$name] = null;
             }
