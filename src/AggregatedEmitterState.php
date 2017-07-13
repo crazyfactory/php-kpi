@@ -66,7 +66,7 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
                 : null;
 
             if ($stateChanged = EmitterStateChange::createIfDifferent($emitterState, $lastEmitterState)) {
-                $stateChanged[$name] = $stateChanged;
+                $stateChanged->$name = $stateChanged;
             }
         }
 

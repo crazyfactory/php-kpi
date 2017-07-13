@@ -5,10 +5,6 @@ namespace CrazyFactory\Kpi;
 class SensorState
 {
     /**
-     * @var string $name
-     */
-    protected $name;
-    /**
      * @var string $value
      */
     protected $value;
