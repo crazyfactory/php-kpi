@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 class EmitterStateChange
 {
     /** @var $lastState EmitterState */

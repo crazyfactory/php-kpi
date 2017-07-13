@@ -19,7 +19,7 @@ abstract class SensorManager
         foreach ($map as $name => $classNameOrInstance) {
             // Sensors should really exist. This is a rare case where a complete stop is welcome.
             if (!is_object($classNameOrInstance) && !class_exists($classNameOrInstance)) {
-                throw new \Exception("sensor class " . $name . " not found");
+                throw new \Exception('sensor class ' . $name . ' not found');
             }
 
             try {
@@ -59,7 +59,7 @@ abstract class SensorManager
             $className = $classNameOrInstance instanceof SensorInterface
                 ? get_class($classNameOrInstance)
                 : $classNameOrInstance;
-            $name = substr($className, strrpos($className, "\\") + 1, -strlen('Sensor'));
+            $name = substr($className, strrpos($className, '\\') + 1, -strlen('Sensor'));
             $map[$name] = $classNameOrInstance;
         }
 

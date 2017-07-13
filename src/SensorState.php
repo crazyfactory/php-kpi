@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 class SensorState
 {
     /**
@@ -39,14 +38,14 @@ class SensorState
      */
     public static function fromArray($array)
     {
-        $value = isset($array["value"])
-            ? $array["value"]
+        $value = isset($array['value'])
+            ? $array['value']
             : null;
-        $duration = isset($array["duration"])
-            ? $array["duration"]
+        $duration = isset($array['duration'])
+            ? $array['duration']
             : null;
-        $timestamp = isset($array["timestamp"])
-            ? $array["timestamp"]
+        $timestamp = isset($array['timestamp'])
+            ? $array['timestamp']
             : null;
 
         return new SensorState($value, $duration, $timestamp);
@@ -82,9 +81,9 @@ class SensorState
     public function toArray()
     {
         return [
-            "value" => $this->value,
-            "duration" => $this->duration,
-            "timestamp" => $this->timestamp,
+            'value' => $this->value,
+            'duration' => $this->duration,
+            'timestamp' => $this->timestamp,
         ];
     }
 }

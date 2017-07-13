@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Crazy Factory PHP Default Style">
+    <config name="installed_paths" value="vendor/crazyfactory/sniffs/src" />
+
+    <!-- File scope -->
+    <file>./</file>
+    <exclude-pattern>./vendor/</exclude-pattern>
+
+    <!-- Rule set -->
+    <rule ref="CrazyFactory" />
+</ruleset>

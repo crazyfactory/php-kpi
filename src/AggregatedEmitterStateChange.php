@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 use Traversable;
 
 class AggregatedEmitterStateChange implements \ArrayAccess, \IteratorAggregate
@@ -150,7 +149,7 @@ class AggregatedEmitterStateChange implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetSet($offset, $value)
     {
-        throw new \Exception("immutable");
+        throw new \Exception('immutable');
     }
 
     /**
@@ -168,6 +167,6 @@ class AggregatedEmitterStateChange implements \ArrayAccess, \IteratorAggregate
      */
     public function offsetUnset($offset)
     {
-        throw new \Exception("immutable");
+        throw new \Exception('immutable');
     }
 }

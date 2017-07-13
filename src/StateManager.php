@@ -2,7 +2,6 @@
 
 namespace CrazyFactory\Kpi;
 
-
 abstract class StateManager implements StateRetrieverInterface
 {
 
