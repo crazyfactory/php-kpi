@@ -80,10 +80,10 @@ class SensorState
      */
     public function toArray()
     {
-        return [
+        return array(
             'value' => $this->value,
             'duration' => $this->duration,
             'timestamp' => $this->timestamp,
-        ];
+        );
     }
 }

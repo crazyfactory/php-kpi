@@ -35,7 +35,7 @@ abstract class EmitterManager
         $begin = microtime(true);
         $map = $this->getEmitterMap();
 
-        $emitterStates = [];
+        $emitterStates = array();
 
         foreach ($map as $name => $classNameOrInstance) {
             // Sensors should really exist. This is a rare case where a complete stop is welcome.
@@ -76,7 +76,7 @@ abstract class EmitterManager
      */
     protected function getEmitterMap()
     {
-        $map = [];
+        $map = array();
         $classes = $this->getEmitters();
         foreach ($classes as $classNameOrInstance) {
             $className = $classNameOrInstance instanceof EmitterInterface
