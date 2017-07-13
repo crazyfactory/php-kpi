@@ -7,5 +7,7 @@
     <exclude-pattern>./vendor/</exclude-pattern>
 
     <!-- Rule set -->
-    <rule ref="CrazyFactory" />
+    <rule ref="CrazyFactory">
+        <exclude name="Generic.Arrays.DisallowLongArraySyntax"/>
+    </rule>
 </ruleset>

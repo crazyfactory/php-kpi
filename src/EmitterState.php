@@ -118,11 +118,11 @@ class EmitterState
      */
     public function toArray()
     {
-        return [
+        return array(
             'id' => $this->id,
             'level' => $this->level,
             'message' => $this->message,
             'timestamp' => $this->timestamp,
-        ];
+        );
     }
 }

@@ -13,7 +13,7 @@ abstract class SensorManager
     public function aggregate(AggregatedSensorState $aggSensorState = null)
     {
         $begin = microtime(true);
-        $result = [];
+        $result = array();
         $map = $this->getSensorMap();
 
         foreach ($map as $name => $classNameOrInstance) {
@@ -53,7 +53,7 @@ abstract class SensorManager
      */
     protected function getSensorMap()
     {
-        $map = [];
+        $map = array();
         $classes = $this->getSensors();
         foreach ($classes as $classNameOrInstance) {
             $className = $classNameOrInstance instanceof SensorInterface
