@@ -20,6 +20,9 @@ before_script:
   - travis_retry composer self-update
   - travis_retry composer update --prefer-dist
 
+script:
+  - echo "No tests implemented"
+
 deploy:
     provider: script
     script: scripts/deploy.sh
