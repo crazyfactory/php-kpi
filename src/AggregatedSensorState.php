@@ -26,7 +26,7 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
      * @param int           $duration
      * @param int|null      $timestamp
      */
-    public function __construct($sensors = [], $duration = null, $timestamp = null)
+    public function __construct($sensors = array(), $duration = null, $timestamp = null)
     {
         $this->sensors = $sensors;
         $this->duration = $duration;
@@ -45,7 +45,7 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
 
         // We need to preserve the keys so we can't use array_map
         if (isset($array['sensors']) && is_array($array['sensors'])) {
-            $sensors = [];
+            $sensors = array();
             foreach ($array['sensors'] as $name => $data) {
                 $sensors[$name] = SensorState::fromArray($data);
             }
@@ -93,17 +93,17 @@ class AggregatedSensorState implements \ArrayAccess, \IteratorAggregate
     {
         $list = null;
         if (is_array($this->sensors)) {
-            $list = [];
+            $list = array();
             foreach ($this->sensors as $name => $sensor) {
                 $list[$name] = $sensor->toArray();
             }
         }
 
-        return [
+        return array(
             'duration' => $this->duration,
             'timestamp' => $this->timestamp,
             'sensors' => $list,
-        ];
+		);
     }
 
     /**
