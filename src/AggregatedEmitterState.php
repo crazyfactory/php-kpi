@@ -26,7 +26,7 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
      * @param int            $duration
      * @param int|null       $timestamp
      */
-    public function __construct($emitters = [], $duration = null, $timestamp = null)
+    public function __construct($emitters = array(), $duration = null, $timestamp = null)
     {
         $this->emitters = $emitters;
         $this->duration = $duration;
@@ -46,16 +46,16 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
         // Get names from both states if existing
         $states = $aggState !== null
             ? $aggState->getEmitters()
-            : [];
+            : array();
         $lastStates = $lastAggState !== null
             ? $lastAggState->getEmitters()
-            : [];
+            : array();
 
         // Get all names from both states
         $names = array_unique(array_merge(array_keys($states), array_keys($lastStates)));
 
         // Compare elements from aggState and lastAggState by name and try create a EmitterStateChange instance.
-        $stateChanges = [];
+        $stateChanges = array();
 
         foreach ($names as $name) {
             $emitterState = isset($states[$name])
@@ -92,7 +92,7 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
         $emitters = null;
         // We need to preserve the names so we can't use array_map
         if (isset($array['emitters']) && is_array($array['emitters'])) {
-            $emitters = [];
+            $emitters = array();
             foreach ($array['emitters'] as $name => $data) {
                 $emitters[$name] = EmitterState::fromArray($data);
             }
@@ -132,18 +132,18 @@ class AggregatedEmitterState implements \ArrayAccess, \IteratorAggregate
     {
         $list = null;
         if (is_array($this->emitters)) {
-            $list = [];
+            $list = array();
             foreach ($this->emitters as $name => $emitter) {
                 $list[$name] = $emitter->toArray();
             }
         }
 
-        return [
+        return array(
             'duration' => $this->duration,
             'timestamp' => $this->timestamp,
             'emitters' => $list,
             'level' => $this->getLevel(),
-        ];
+		);
     }
 
     /**
