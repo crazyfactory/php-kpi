@@ -16,14 +16,9 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-install : scripts/http-auth.sh
-
 before_script:
   - travis_retry composer self-update
   - travis_retry composer update --prefer-dist
-
-script:
-  - ./vendor/bin/phpcs
 
 deploy:
     provider: script
