@@ -34,7 +34,7 @@ abstract class NotifierManager
      */
     protected function getNotifierMap()
     {
-        $map = [];
+        $map = array();
         $classes = $this->getNotifiers();
         foreach ($classes as $classNameOrInstance) {
             $className = $classNameOrInstance instanceof NotifierInterface
